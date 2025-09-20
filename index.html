@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ROYAL OCEAN</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f4f4, #e1f5fe);
+    }
+    header {
+      background: #0288d1;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    #menu {
+      width: 240px;
+      background: #01579b;
+      color: white;
+      height: 100vh;
+      padding-top: 30px;
+      position: fixed;
+      left: 0;
+      top: 0;
+    }
+    #menu button {
+      width: 90%;
+      margin: 12px;
+      padding: 16px;
+      border: none;
+      background: #0288d1;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    #menu button:hover {
+      background: #039be5;
+    }
+    #content {
+      margin-left: 260px;
+      padding: 30px;
+      width: 100%;
+    }
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 25px;
+    }
+    input {
+      width: 95%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .btn {
+      background: #0288d1;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background: #0277bd;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<header>ROYAL OCEAN</header>
+
+<div id="loginPage" class="card" style="max-width:420px; margin:60px auto;">
+  <h2>Login / Sign Up</h2>
+  <input type="text" id="username" placeholder="Enter Username">
+  <input type="password" id="password" placeholder="Enter Password">
+  <input type="text" id="inviter" placeholder="Enter Inviter Name (Optional)">
+  <button class="btn" onclick="login()">Login / Sign Up</button>
+</div>
+
+<div id="mainApp" class="hidden">
+  <div id="menu">
+    <button onclick="showSection('profile')">Profile</button>
+    <button onclick="showSection('plan')">Plan</button>
+    <button onclick="showSection('deposit')">Deposit</button>
+    <button onclick="showSection('earn')">Earn Money</button>
+    <button onclick="showSection('withdraw')">Withdraw</button>
+    <button onclick="showSection('team')">Team</button>
+    <button onclick="showSection('helpline')">Helpline</button>
+    <button onclick="showSection('admin')">Admin Panel</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+  <div id="content">
+    <div id="profile" class="card">
+      <h2>Profile</h2>
+      <p><b>Username:</b> <span id="displayUser"></span></p>
+      <p><b>Balance:</b> <span id="balance">0</span> PKR</p>
+      <p><b>Plan Status:</b> <span id="planStatus">No Active Plan</span></p>
+      <p><b>Inviter:</b> <span id="inviterName">None</span></p>
+    </div>
+
+    <div id="plan" class="card hidden">
+      <h2>Plan</h2>
+      <p>Deposit 500 PKR and Earn 30 PKR daily for 30 days</p>
+      <button class="btn" onclick="buyPlan()">Buy Plan</button>
+      <p id="planMsg"></p>
+    </div>
+
+    <div id="deposit" class="card hidden">
+      <h2>Deposit</h2>
+      <p>Send money to JazzCash: <b>03228786546</b></p>
+      <input type="number" id="depAmount" placeholder="Enter Amount">
+      <input type="text" id="senderName" placeholder="Sender Name">
+      <input type="text" id="senderPhone" placeholder="Sender Phone">
+      <input type="text" id="tillId" placeholder="TILL ID">
+      <button class="btn" onclick="sendDeposit()">Send Deposit Request</button>
+      <p id="depositMsg"></p>
+    </div>
+
+    <div id="earn" class="card hidden">
+      <h2>Earn Money</h2>
+      <p>Click below YouTube video (Max 4 times per day, +5 PKR each)</p>
+      <a href="https://youtube.com/shorts/W4dMwdPpJuA?si=dg_pxYfj7FsNWY_D" target="_blank">
+        Watch Video
+      </a><br><br>
+      <button class="btn" onclick="earnClick()">Watch Video</button>
+      <p id="earnMsg"></p>
+    </div>
+
+    <div id="withdraw" class="card hidden">
+      <h2>Withdraw</h2>
+      <input type="number" id="withAmount" placeholder="Enter Amount">
+      <input type="text" id="withNumber" placeholder="Your JazzCash Number">
+      <button class="btn" onclick="sendWithdraw()">Send Withdraw Request</button>
+      <p id="withdrawMsg"></p>
+    </div>
+
+    <div id="team" class="card hidden">
+      <h2>Team</h2>
+      <p>Your Referral Link:</p>
+      <input type="text" id="refLink" value="royalocean.com/join?ref=" readonly>
+      <button class="btn" onclick="copyRef()">Copy Link</button>
+      <p id="copyMsg"></p>
+      <br>
+      <p>Invited Members:</p>
+      <ul id="inviteList"></ul>
+    </div>
+
+    <div id="helpline" class="card hidden">
+      <h2>Helpline</h2>
+      <p>WhatsApp Channel: 
+        <a href="https://whatsapp.com/channel/0029Vb6Gx7LKWEKrxZVXWK0o" target="_blank">Join Here</a>
+      </p>
+    </div>
+
+    <div id="admin" class="card hidden">
+      <h2>Admin Panel</h2>
+      <input type="email" id="adminEmail" placeholder="Enter Admin Gmail">
+      <input type="password" id="adminPass" placeholder="Enter Admin Password">
+      <button class="btn" onclick="adminLogin()">Login</button>
+      <div id="adminSection" class="hidden">
+        <h3>Pending Requests</h3>
+        <ul id="requests"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentUser = null;
+let inviterUser = null;
+let balance = 0;
+let earnClicks = 0;
+let requests = [];
+
+// Plan variables
+let activePlan = false;
+let planDays = 0;
+
+// Admin credentials
+const ADMIN_EMAIL = "malik9nft@gmail.com";
+const ADMIN_PASSWORD = "AMIR131P";
+
+// Track new users to give registration bonus
+let registeredUsers = {};
+
+function login(){
+  let user = document.getElementById("username").value;
+  let inviter = document.getElementById("inviter").value;
+  if(user === "") { alert("Enter username"); return; }
+  
+  currentUser = user;
+  inviterUser = inviter || "None";
+
+  // Registration Bonus (first time only)
+  if(!registeredUsers[user]){
+    balance += 50; // bonus
+    registeredUsers[user] = true;
+    alert("Welcome "+user+"! You received 50 PKR registration bonus.");
+  }
+
+  document.getElementById("displayUser").innerText = user;
+  document.getElementById("refLink").value = "royalocean.com/join?ref=" + user;
+  document.getElementById("inviterName").innerText = inviterUser;
+  document.getElementById("balance").innerText = balance;
+  
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("mainApp").classList.remove("hidden");
+}
+
+function logout(){
+  location.reload();
+}
+
+function showSection(id){
+  document.querySelectorAll("#content .card").forEach(el=>el.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+// Copy referral link
+function copyRef(){
+  let ref = document.getElementById("refLink");
+  ref.select();
+  ref.setSelectionRange(0, 99999); // mobile support
+  navigator.clipboard.writeText(ref.value).then(()=>{
+    document.getElementById("copyMsg").innerText = "Referral link copied!";
+  });
+}
+</script>
+</body>
+</html>
